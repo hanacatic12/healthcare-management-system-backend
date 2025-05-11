@@ -27,4 +27,5 @@ public class UserDto {
     private String work_start;
     private String work_end;
     private String role;
+    private String jmbg;
 }

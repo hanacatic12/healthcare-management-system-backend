@@ -33,7 +33,8 @@ public class AuthService {
                 null,
                 null,
                 null,
-                "patient"
+                "patient",
+                "1105993710028"
         ));
     }
 
@@ -64,7 +65,8 @@ public class AuthService {
                 null,
                 null,
                 null,
-                "patient"
+                "patient",
+                registerRequest.getJmbg()
         );
 
         String token = "dummy-token-" + newUser.getEmail();
