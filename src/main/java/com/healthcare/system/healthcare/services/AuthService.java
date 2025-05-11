@@ -17,10 +17,30 @@ public class AuthService {
     private List<UserDto> users = new ArrayList<>();
     private Integer counter = 0;
 
+    public AuthService() {
+        users.add(new UserDto(
+                counter++,
+                "John Doe",
+                "john.doe@gmail.com",
+                "password123",
+                "+387 33 975 002",
+                "Hrasnička cesta 3a",
+                "Sarajevo",
+                LocalDate.parse("1985-01-01"),
+                "Male",
+                "A+",
+                LocalDate.parse("2024-02-15"),
+                null,
+                null,
+                null,
+                "patient"
+        ));
+    }
+
     public AuthResponse login(LoginRequest loginRequest) {
         UserDto user = users.stream().filter(u -> u.getEmail().equals(loginRequest.getEmail()) && u.getPassword().equals(loginRequest.getPassword())).findFirst().orElse(null);
 
-        if (user != null) {throw new RuntimeException("Invalid credentials");}
+        if (user == null) {throw new RuntimeException("Invalid credentials");}
         else {
             String token = "dummy-token-" + user.getEmail();
             return new AuthResponse(token, user.getEmail(), user.getUid(), user.getName());
