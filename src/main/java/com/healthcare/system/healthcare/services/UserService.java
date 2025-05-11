@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.services;
 
-import com.healthcare.system.healthcare.models.dtos.UserDto;
+import com.healthcare.system.healthcare.models.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,11 +11,10 @@ import java.util.List;
 public class UserService {
 
     private List<UserDto> users = new ArrayList<>();
-    private Integer counter = 0;
 
     public UserService() {
         users.add(new UserDto(
-                counter++,
+                123,
                 "John Doe",
                 "john.doe@gmail.com",
                 "password123",
@@ -34,7 +33,7 @@ public class UserService {
         ));
 
         users.add(new UserDto(
-                counter++,
+                456,
                 "Jane Smith",
                 "jane.smith@hospital.com",
                 "password456",
