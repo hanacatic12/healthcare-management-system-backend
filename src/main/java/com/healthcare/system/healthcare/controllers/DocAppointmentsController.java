@@ -22,6 +22,18 @@ public class DocAppointmentsController {
         return null;
     }
 
+    @GetMapping("/single")
+    public AppointmentDto getAppointmentById(
+            @PathVariable Integer uid,
+            @RequestParam Integer aid,
+            @RequestParam String role
+    ) {
+        if ("doctor".equalsIgnoreCase(role)) {
+            return appointmentService.getAppointmentById(uid, aid);
+        }
+        return null;
+    }
+
     @PutMapping
     public AppointmentDto updateAppointment(
             @RequestBody AppointmentDto appointment,
