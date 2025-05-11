@@ -82,4 +82,11 @@ public class AppointmentService {
 
         return toUpdate;
     }
+
+    public AppointmentDto getAppointmentById(Integer uid, Integer aid) {
+        return appointments.stream()
+                .filter(a -> a.getDoctorId().equals(uid) && a.getAid().equals(aid))
+                .findFirst()
+                .orElse(null);
+    }
 }
