@@ -28,7 +28,8 @@ public class UserService {
                 null,
                 null,
                 null,
-                "patient"
+                "patient",
+                "1105993710028"
         ));
 
         users.add(new UserDto(
@@ -46,7 +47,8 @@ public class UserService {
                 "Cardiology",
                 "09:00",
                 "17:00",
-                "doctor"
+                "doctor",
+                "2304006715036"
         ));
     }
 
