@@ -1,4 +1,4 @@
-package com.healthcare.system.healthcare.models.dtos;
+package com.healthcare.system.healthcare.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
