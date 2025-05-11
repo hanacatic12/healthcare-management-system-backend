@@ -5,7 +5,7 @@ import com.healthcare.system.healthcare.models.DoctorAppointmentsView;
 import com.healthcare.system.healthcare.services.AppointmentService;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/appointments")
+@RequestMapping("/appointments/{uid}")
 @RestController
 public class DocAppointmentsController {
     private final AppointmentService appointmentService;
@@ -14,7 +14,7 @@ public class DocAppointmentsController {
         this.appointmentService = appointmentService;
     }
 
-    @GetMapping("/{uid}")
+    @GetMapping
     public DoctorAppointmentsView getAppointments(@PathVariable Integer uid, @RequestParam String role) {
         if ("doctor".equalsIgnoreCase(role)) {
             return appointmentService.getDoctorAppointments(uid);
@@ -22,7 +22,7 @@ public class DocAppointmentsController {
         return null;
     }
 
-    @PutMapping("/{uid}")
+    @PutMapping
     public AppointmentDto updateAppointment(
             @RequestBody AppointmentDto appointment,
             @RequestParam String action) {
