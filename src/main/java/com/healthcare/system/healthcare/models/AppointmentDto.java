@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AppointmentDto {
+public class  AppointmentDto {
     private Integer aid;
     private Integer patientId;
     private Integer doctorId;
