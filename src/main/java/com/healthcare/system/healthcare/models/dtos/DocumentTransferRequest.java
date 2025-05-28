@@ -1,4 +1,4 @@
-package com.healthcare.system.healthcare.dtos;
+package com.healthcare.system.healthcare.models.dtos;
 
 public class DocumentTransferRequest {
     private Integer senderId;

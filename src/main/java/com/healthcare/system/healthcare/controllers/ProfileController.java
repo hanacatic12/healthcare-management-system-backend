@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.models.UserDto;
+import com.healthcare.system.healthcare.models.dtos.UserDto;
 import com.healthcare.system.healthcare.services.UserService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.healthcare.system.healthcare.models;
+package com.healthcare.system.healthcare.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -22,10 +22,6 @@ public class UserDto {
     private LocalDate dob;
     private String gender;
     private String blood_group;
-    private LocalDate last_visit;
-    private String department;
-    private String work_start;
-    private String work_end;
     private String role;
     private String jmbg;
 }

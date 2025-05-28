@@ -1,5 +1,6 @@
 package com.healthcare.system.healthcare.models;
 
+import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
 import lombok.Getter;
 
 import java.util.List;

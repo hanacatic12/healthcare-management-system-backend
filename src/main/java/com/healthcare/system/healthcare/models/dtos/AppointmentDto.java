@@ -1,4 +1,4 @@
-package com.healthcare.system.healthcare.models;
+package com.healthcare.system.healthcare.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
