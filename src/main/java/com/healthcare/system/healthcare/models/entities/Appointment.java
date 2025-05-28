@@ -37,4 +37,6 @@ public class Appointment {
 
     @Column(name = "status")
     private String status;
+
+
 }
