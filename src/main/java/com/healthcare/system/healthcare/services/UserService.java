@@ -1,6 +1,8 @@
 package com.healthcare.system.healthcare.services;
 
-import com.healthcare.system.healthcare.models.UserDto;
+import com.healthcare.system.healthcare.models.dtos.UserDto;
+import com.healthcare.system.healthcare.models.entities.User;
+import com.healthcare.system.healthcare.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,8 +13,10 @@ import java.util.List;
 public class UserService {
 
     private List<UserDto> users = new ArrayList<>();
+    private UserRepository userRepository;
 
-    public UserService() {
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
         users.add(new UserDto(
                 123,
                 "John Doe",
@@ -24,10 +28,6 @@ public class UserService {
                 LocalDate.parse("1985-01-01"),
                 "Male",
                 "A+",
-                LocalDate.parse("2024-02-15"),
-                null,
-                null,
-                null,
                 "patient",
                 "1105993710028"
         ));
@@ -43,38 +43,49 @@ public class UserService {
                 LocalDate.parse("1980-05-15"),
                 "Female",
                 "B+",
-                null,
-                "Cardiology",
-                "09:00",
-                "17:00",
                 "doctor",
                 "2304006715036"
         ));
     }
 
     public UserDto getUser(Integer uid) {
-        return users.stream()
-                .filter(p -> uid != null && uid.equals(p.getUid()))
-                .findFirst()
+        return userRepository.findById(uid)
+                .map(User -> convertToDto(User))
                 .orElse(null);
     }
 
-    public UserDto updateUser(Integer uid, UserDto user) {
-        UserDto toUpdate = users.stream()
-                .filter(p -> uid != null && uid.equals(p.getUid()))
-                .findFirst()
+    private UserDto convertToDto(User user) {
+        return new UserDto(
+                user.getUid(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getCity(),
+                user.getDob(),
+                user.getGender(),
+                user.getBlood_group(),
+                user.getRole(),
+                user.getJmbg()
+        );
+    }
+
+    public UserDto updateUser(Integer uid, UserDto userDto) {
+        return userRepository.findById(uid)
+                .map(existingUser -> {
+                    existingUser.setEmail(userDto.getEmail());
+                    existingUser.setPhone(userDto.getPhone());
+                    existingUser.setAddress(userDto.getAddress());
+                    existingUser.setCity(userDto.getCity());
+                    existingUser.setDob(userDto.getDob());
+                    existingUser.setGender(userDto.getGender());
+                    existingUser.setBlood_group(userDto.getBlood_group());
+
+                    userRepository.save(existingUser);
+
+                    return convertToDto(existingUser);
+                })
                 .orElse(null);
-
-        if (toUpdate != null) {
-            toUpdate.setEmail(user.getEmail());
-            toUpdate.setPhone(user.getPhone());
-            toUpdate.setAddress(user.getAddress());
-            toUpdate.setCity(user.getCity());
-            toUpdate.setDob(user.getDob());
-            toUpdate.setGender(user.getGender());
-            toUpdate.setBlood_group(user.getBlood_group());
-        }
-
-        return toUpdate;
     }
 }

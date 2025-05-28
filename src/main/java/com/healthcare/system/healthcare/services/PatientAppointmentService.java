@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.services;
 
-import com.healthcare.system.healthcare.models.AppointmentDto;
+import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

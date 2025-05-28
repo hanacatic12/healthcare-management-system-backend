@@ -29,10 +29,6 @@ public class AuthService {
                 LocalDate.parse("1985-01-01"),
                 "Male",
                 "A+",
-                LocalDate.parse("2024-02-15"),
-                null,
-                null,
-                null,
                 "patient",
                 "1105993710028"
         ));
@@ -61,10 +57,6 @@ public class AuthService {
                 registerRequest.getDob(),
                 registerRequest.getGender(),
                 registerRequest.getBlood_group(),
-                null,
-                null,
-                null,
-                null,
                 "patient",
                 registerRequest.getJmbg()
         );

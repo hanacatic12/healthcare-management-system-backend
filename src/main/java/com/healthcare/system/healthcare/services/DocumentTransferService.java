@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.services;
 
-import com.healthcare.system.healthcare.dtos.DocumentTransferRequest;
+import com.healthcare.system.healthcare.models.dtos.DocumentTransferRequest;
 import com.healthcare.system.healthcare.models.Document;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.models.AppointmentDto;
+import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
 import com.healthcare.system.healthcare.models.DoctorAppointmentsView;
 import com.healthcare.system.healthcare.services.AppointmentService;
 import org.springframework.web.bind.annotation.*;

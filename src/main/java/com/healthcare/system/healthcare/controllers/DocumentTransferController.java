@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.dtos.DocumentTransferRequest;
+import com.healthcare.system.healthcare.models.dtos.DocumentTransferRequest;
 import com.healthcare.system.healthcare.models.Document;
 import com.healthcare.system.healthcare.services.DocumentTransferService;
 import org.springframework.web.bind.annotation.*;

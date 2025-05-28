@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.dtos.PatientResponse;
+import com.healthcare.system.healthcare.models.dtos.PatientResponse;
 import com.healthcare.system.healthcare.models.Patient;
 import com.healthcare.system.healthcare.services.PatientListService;
 import org.springframework.web.bind.annotation.*;

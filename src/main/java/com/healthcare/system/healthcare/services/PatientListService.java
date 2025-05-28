@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.services;
 
-import com.healthcare.system.healthcare.dtos.PatientResponse;
+import com.healthcare.system.healthcare.models.dtos.PatientResponse;
 import com.healthcare.system.healthcare.models.Patient;
 import org.springframework.stereotype.Service;
 
