@@ -2,6 +2,7 @@ package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
 import com.healthcare.system.healthcare.models.DoctorAppointmentsView;
+import com.healthcare.system.healthcare.repositories.AppointmentsRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,7 +15,10 @@ import java.util.stream.Collectors;
 public class AppointmentService {
     private List<AppointmentDto> appointments = new ArrayList<>();
 
-    public AppointmentService() {
+    private AppointmentsRepository appointmentsRepository;
+
+    public AppointmentService(AppointmentsRepository appointmentsRepository) {
+        this.appointmentsRepository = appointmentsRepository;
         appointments.add(new AppointmentDto(
                 1,
                 123,

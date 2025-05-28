@@ -1,5 +1,6 @@
 package com.healthcare.system.healthcare.models.dtos;
 
+import com.healthcare.system.healthcare.models.entities.Appointment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,6 @@ public class  AppointmentDto {
     private LocalDate date;
     private LocalTime time;
     private String status;
+
+
 }
