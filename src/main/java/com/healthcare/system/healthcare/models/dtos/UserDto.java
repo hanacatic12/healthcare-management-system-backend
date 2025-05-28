@@ -1,5 +1,6 @@
 package com.healthcare.system.healthcare.models.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class UserDto {
     private String phone;
     private String address;
     private String city;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
     private String gender;
     private String blood_group;
