@@ -12,12 +12,13 @@ public class CorsConfig {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
+        System.out.println("CORS config loaded");
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins("http://localhost:4200/");
+                        .allowedOrigins("http://localhost:4200");
             }
         };
     }

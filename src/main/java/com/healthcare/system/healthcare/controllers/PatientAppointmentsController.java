@@ -2,6 +2,7 @@ package com.healthcare.system.healthcare.controllers;
 
 import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
 import com.healthcare.system.healthcare.services.PatientAppointmentService;
+import com.healthcare.system.healthcare.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RequestMapping("appointments/patient/{uid}")
 public class PatientAppointmentsController {
     private PatientAppointmentService appointmentService;
+    private UserService userService;
 
     public PatientAppointmentsController(PatientAppointmentService appointmentService) {this.appointmentService = appointmentService;}
 
@@ -32,4 +34,6 @@ public class PatientAppointmentsController {
     public AppointmentDto cancelAppointment(@RequestParam Integer aid) {
         return appointmentService.cancelAppointment(aid);
     }
+
+
 }
