@@ -1,6 +1,6 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.dtos.DocumentTransferRequest;
+import com.healthcare.system.healthcare.models.dtos.DocumentTransferRequest;
 import com.healthcare.system.healthcare.models.Document;
 import com.healthcare.system.healthcare.services.DocumentTransferService;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,7 @@ public class DocumentTransferController {
     public List<Document> getAllDocuments() {
         return service.getAllDocuments();
     }
+
     @GetMapping("/received/{userId}")
     public List<Document> getReceived(@PathVariable Integer userId) {
         return service.getReceivedDocuments(userId);
@@ -31,13 +32,12 @@ public class DocumentTransferController {
         return service.getSentDocuments(userId);
     }
 
-
     @GetMapping("/user/{userId}")
     public List<Document> getDocumentsForUser(@PathVariable Integer userId) {
         return service.getDocumentsForUser(userId);
     }
 
-    @PostMapping ("/send")
+    @PostMapping("/send")
     public Document sendDocument(@RequestBody DocumentTransferRequest request) {
         return service.sendDocument(request);
     }
