@@ -2,12 +2,14 @@ package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.DocumentTransferRequest;
 import com.healthcare.system.healthcare.models.Document;
+import com.healthcare.system.healthcare.models.entities.Doctor;
+import com.healthcare.system.healthcare.models.entities.Patient;
+import com.healthcare.system.healthcare.repositories.DocumentRepository;
+import com.healthcare.system.healthcare.repositories.DoctorRepository;
+import com.healthcare.system.healthcare.repositories.PatientRepository;
+
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public interface DocumentTransferService {
     List<Document> getAllDocuments();
@@ -19,58 +21,67 @@ public interface DocumentTransferService {
 
 @Service
 class DocumentTransferServiceImpl implements DocumentTransferService {
+    private final DocumentRepository documentRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
 
-    private final List<Document> dummyDocuments = new ArrayList<>();
-    private final AtomicInteger documentIdCounter = new AtomicInteger(5);
-
-    public DocumentTransferServiceImpl() {
-
-        dummyDocuments.add(new Document(1, 10, 20, "Lab Results", "Blood work normal", true, "doctor", "patient"));
-        dummyDocuments.add(new Document(2, 20, 10, "Prior Diagnosis", "I had a broken arm", false, "patient", "doctor"));
-        dummyDocuments.add(new Document(3, 10, 20, "X-ray Analysis", "Fracture detected", true, "doctor", "patient"));
-        dummyDocuments.add(new Document(4, 20, 10, "Prescription History", "Amoxicillin, 2x daily", false, "patient", "doctor"));
+    public DocumentTransferServiceImpl(DocumentRepository documentRepository,
+                                     DoctorRepository doctorRepository,
+                                     PatientRepository patientRepository) {
+        this.documentRepository = documentRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
     }
 
     @Override
     public List<Document> getAllDocuments() {
-        return dummyDocuments;
+        return documentRepository.findAll();
     }
 
     @Override
     public List<Document> getDocumentsForUser(Integer userId) {
-        if (userId == null) return new ArrayList<>();
-        return dummyDocuments.stream()
-                .filter(doc -> Objects.equals(doc.getReceiverId(), userId) || Objects.equals(doc.getSenderId(), userId))
-                .collect(Collectors.toList());
+        Doctor doctor = doctorRepository.findById(userId).orElse(null);
+        if (doctor != null) {
+            return documentRepository.findBySender(doctor);
+        }
+        
+        Patient patient = patientRepository.findById(userId).orElse(null);
+        if (patient != null) {
+            return documentRepository.findByReceiver(patient);
+        }
+        
+        return List.of();
     }
 
     @Override
     public List<Document> getReceivedDocuments(Integer userId) {
-        return dummyDocuments.stream()
-                .filter(doc -> Objects.equals(doc.getReceiverId(), userId))
-                .collect(Collectors.toList());
+        Patient patient = patientRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        return documentRepository.findByReceiver(patient);
     }
 
     @Override
     public List<Document> getSentDocuments(Integer userId) {
-        return dummyDocuments.stream()
-                .filter(doc -> Objects.equals(doc.getSenderId(), userId))
-                .collect(Collectors.toList());
+        Doctor doctor = doctorRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+        return documentRepository.findBySender(doctor);
     }
 
     @Override
     public Document sendDocument(DocumentTransferRequest request) {
-        Document newDoc = new Document(
-                documentIdCounter.getAndIncrement(),
-                request.getSenderId(),
-                request.getReceiverId(),
-                request.getTitle(),
-                request.getContent(),
-                request.isForPatient(),
-                request.getSenderRole(),
-                request.getReceiverRole()
-        );
-        dummyDocuments.add(newDoc);
-        return newDoc;
+        Doctor sender = doctorRepository.findById(request.getSenderId())
+                .orElseThrow(() -> new RuntimeException("Sender doctor not found"));
+        
+        Patient receiver = patientRepository.findById(request.getReceiverId())
+                .orElseThrow(() -> new RuntimeException("Receiver patient not found"));
+
+        Document document = new Document();
+        document.setSender(sender);
+        document.setReceiver(receiver);
+        document.setTitle(request.getTitle());
+        document.setContent(request.getContent());
+        document.setIsForPatient(request.isForPatient());
+
+        return documentRepository.save(document);
     }
 }

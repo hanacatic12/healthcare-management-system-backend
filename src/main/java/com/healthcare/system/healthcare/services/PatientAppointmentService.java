@@ -79,7 +79,7 @@ public class PatientAppointmentService {
     public AppointmentDto bookAppointment(AppointmentDto newAppointment, Integer uid) {
         Appointment appointment = new Appointment();
         appointment.setPatient(uid);
-        appointment.setDoctor(newAppointment.getDoctorId());
+        appointment.setDoctor(newAppointment.getDoctor());
         appointment.setRoom(null);
         appointment.setNote(newAppointment.getNote());
         appointment.setDate(null);

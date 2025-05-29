@@ -21,6 +21,7 @@ public class DocumentTransferController {
     public List<Document> getAllDocuments() {
         return service.getAllDocuments();
     }
+
     @GetMapping("/received/{userId}")
     public List<Document> getReceived(@PathVariable Integer userId) {
         return service.getReceivedDocuments(userId);
@@ -31,13 +32,12 @@ public class DocumentTransferController {
         return service.getSentDocuments(userId);
     }
 
-
     @GetMapping("/user/{userId}")
     public List<Document> getDocumentsForUser(@PathVariable Integer userId) {
         return service.getDocumentsForUser(userId);
     }
 
-    @PostMapping ("/send")
+    @PostMapping("/send")
     public Document sendDocument(@RequestBody DocumentTransferRequest request) {
         return service.sendDocument(request);
     }
