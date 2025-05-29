@@ -1,6 +1,7 @@
 package com.healthcare.system.healthcare.models.dtos;
 
 import com.healthcare.system.healthcare.models.entities.Appointment;
+import io.micrometer.common.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

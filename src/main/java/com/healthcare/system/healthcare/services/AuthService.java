@@ -5,7 +5,6 @@ import com.healthcare.system.healthcare.models.dtos.LoginRequest;
 import com.healthcare.system.healthcare.models.dtos.RegisterRequest;
 import com.healthcare.system.healthcare.models.dtos.UserDto;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
