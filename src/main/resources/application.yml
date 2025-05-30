@@ -17,6 +17,7 @@ spring:
       repositories.enabled: true
 
 frontend:
-  url:{FRONTEND_URL:http://localhost:4200}
+  url: ${FRONTEND_URL:http://localhost:4200}
+
 
 
