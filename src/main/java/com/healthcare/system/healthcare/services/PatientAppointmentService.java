@@ -1,10 +1,20 @@
 package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.AppointmentDto;
+import com.healthcare.system.healthcare.models.dtos.DepartmentDto;
+import com.healthcare.system.healthcare.models.dtos.DoctorDto;
+import com.healthcare.system.healthcare.models.dtos.UserDto;
 import com.healthcare.system.healthcare.models.entities.Appointment;
+import com.healthcare.system.healthcare.models.entities.Department;
+import com.healthcare.system.healthcare.models.entities.Doctor;
+import com.healthcare.system.healthcare.models.entities.User;
 import com.healthcare.system.healthcare.repositories.AppointmentsRepository;
+import com.healthcare.system.healthcare.repositories.DepartmentsRepository;
+import com.healthcare.system.healthcare.repositories.DoctorRepository;
+import com.healthcare.system.healthcare.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,41 +25,15 @@ public class PatientAppointmentService {
 //    private Integer counter = 4;
 
     private AppointmentsRepository appointmentsRepository;
+    private DepartmentsRepository departmentsRepository;
+    private DoctorRepository doctorRepository;
+    private UserRepository userRepository;
 
-    public PatientAppointmentService(AppointmentsRepository appointmentsRepository) {
+    public PatientAppointmentService(AppointmentsRepository appointmentsRepository, DepartmentsRepository departmentsRepository, DoctorRepository doctorRepository, UserRepository userRepository) {
         this.appointmentsRepository = appointmentsRepository;
-//        appointments.add(new AppointmentDto(
-//                1,
-//                123,
-//                456,
-//                0,
-//                "Available on Monday.",
-//                LocalDate.parse("2025-06-10"),
-//                LocalTime.parse("10:00"),
-//                "upcoming"
-//        ));
-//
-//        appointments.add(new AppointmentDto(
-//                2,
-//                123,
-//                456,
-//                22,
-//                "Afternoons on Thursday.",
-//                LocalDate.parse("2025-06-10"),
-//                LocalTime.parse("10:00"),
-//                "accepted"
-//        ));
-//
-//        appointments.add(new AppointmentDto(
-//                3,
-//                103,
-//                202,
-//                11,
-//                "Evenings on Friday.",
-//                LocalDate.parse("2025-06-10"),
-//                LocalTime.parse("10:00"),
-//                "upcoming"
-//        ));
+        this.departmentsRepository = departmentsRepository;
+        this.doctorRepository = doctorRepository;
+        this.userRepository = userRepository;
     }
 
     public AppointmentDto MapToDto(Appointment appointment) {
@@ -103,5 +87,45 @@ public class PatientAppointmentService {
         throw new RuntimeException("Appointment not found");
 
     }
+
+    public List<DepartmentDto> getDepartments() {
+        List<Department> departments = this.departmentsRepository.findAll();
+        List <DepartmentDto> departmentDtos = new ArrayList<>();
+        for(Department department : departments) {
+            DepartmentDto departmentDto = new DepartmentDto(department.getDid(), department.getName(), department.getFloor());
+            departmentDtos.add(departmentDto);
+        }
+
+        return departmentDtos;
+    }
+
+    public List<DoctorDto> getDoctorsByDepartment(Integer did) {
+        List<Doctor> doctors = doctorRepository.findByDepartment(did);
+
+        return doctors.stream()
+                .map(doc -> new DoctorDto(doc.getDid(), userRepository.findById(doc.getDid()).get().getName()))
+                .collect(Collectors.toList());
+    }
+
+    public UserDto getDoctorFromUser(Integer did) {
+        User user = userRepository.findById(did).orElse(null);
+        if(user != null) {
+            return new UserDto(user.getUid(), user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(), user.getCity(), user.getDob(), user.getGender(), user.getBlood_group(), user.getRole(), user.getJmbg());
+        }
+        throw new RuntimeException("No doctor found");
+    }
+
+    public DepartmentDto getDepartmentById(Integer did) {
+        Doctor doctor = doctorRepository.findById(did).orElse(null);
+        if(doctor != null) {
+            Integer deptId = doctor.getDepartment().getDid();
+            Department department = departmentsRepository.findById(deptId).orElse(null);
+            if(department != null) {
+                return new DepartmentDto(department.getDid(), department.getName(), department.getFloor());
+            }
+            throw new RuntimeException("No department found");
+        }
+        throw new RuntimeException("No doctor found");
+        }
 
 }

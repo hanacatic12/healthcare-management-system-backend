@@ -1,54 +1,54 @@
 package com.healthcare.system.healthcare.controllers;
 
-
 import com.healthcare.system.healthcare.models.dtos.AuthResponse;
 import com.healthcare.system.healthcare.models.dtos.LoginRequest;
 import com.healthcare.system.healthcare.models.dtos.RegisterRequest;
 import com.healthcare.system.healthcare.services.AuthService;
-//import com.healthcare.system.healthcare.util.JwtUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.naming.AuthenticationException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private AuthService authService;
-
-    public AuthController(AuthService authService) {this.authService = authService;}
-
-    //private final AuthenticationManager authenticationManager;
-    //private final JwtUtil jwtTokenUtil;
+    private final AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody RegisterRequest registerRequest) {
-        return authService.register(registerRequest);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            AuthResponse response = authService.register(registerRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest);
-        /*
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new AuthResponse(""));
+            AuthResponse response = authService.login(loginRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    private static class ErrorResponse {
+        private final String message;
+
+        public ErrorResponse(String message) {
+            this.message = message;
         }
 
-        final String jwt = jwtTokenUtil.generateToken(loginRequest.getEmail());
-
-        return ResponseEntity.ok(new AuthResponse(jwt));
-     */}
-
-
+        public String getMessage() {
+            return message;
+        }
+    }
 }
