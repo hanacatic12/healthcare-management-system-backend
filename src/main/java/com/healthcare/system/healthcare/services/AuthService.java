@@ -3,64 +3,75 @@ package com.healthcare.system.healthcare.services;
 import com.healthcare.system.healthcare.models.dtos.AuthResponse;
 import com.healthcare.system.healthcare.models.dtos.LoginRequest;
 import com.healthcare.system.healthcare.models.dtos.RegisterRequest;
-import com.healthcare.system.healthcare.models.dtos.UserDto;
-import org.springframework.stereotype.Service;
+import com.healthcare.system.healthcare.models.entities.User;
+import com.healthcare.system.healthcare.repositories.UserRepository;
+import com.healthcare.system.healthcare.util.JwtUtil;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    private List<UserDto> users = new ArrayList<>();
-    private Integer counter = 0;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthService() {
-        users.add(new UserDto(
-                counter++,
-                "John Doe",
-                "john.doe@gmail.com",
-                "password123",
-                "+387 33 975 002",
-                "Hrasnička cesta 3a",
-                "Sarajevo",
-                LocalDate.parse("1985-01-01"),
-                "Male",
-                "A+",
-                "patient",
-                "1105993710028"
-        ));
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
-        UserDto user = users.stream().filter(u -> u.getEmail().equals(loginRequest.getEmail()) && u.getPassword().equals(loginRequest.getPassword())).findFirst().orElse(null);
+        System.out.println(loginRequest.getEmail());
+        System.out.println(loginRequest.getPassword());
+        try {
+            User user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
-        if (user == null) {throw new RuntimeException("Invalid credentials");}
-        else {
-            String token = "dummy-token-" + user.getEmail();
-            return new AuthResponse(token, user.getEmail(), user.getUid(), user.getName());
+            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+
+                throw new RuntimeException("Invalid email or password");
+            }
+
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+            return new AuthResponse(user.getUid(), token);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
-        System.out.println(registerRequest.getEmail());
-        UserDto newUser = new UserDto(
-                counter++,
-                registerRequest.getFirstName() + " " + registerRequest.getLastName(),
-                registerRequest.getEmail(),
-                registerRequest.getPassword(),
-                registerRequest.getPhone(),
-                registerRequest.getAddress(),
-                registerRequest.getCity(),
-                registerRequest.getDob(),
-                registerRequest.getGender(),
-                registerRequest.getBlood_group(),
-                "patient",
-                registerRequest.getJmbg()
-        );
+        String email = registerRequest.getEmail();
 
-        String token = "dummy-token-" + newUser.getEmail();
-        return new AuthResponse(token, newUser.getEmail(), newUser.getUid(), newUser.getName());
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match");
+        }
+
+        User user = new User();
+        user.setName(registerRequest.getFirstName() + " " + registerRequest.getLastName());
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setPhone(registerRequest.getPhone());
+        user.setAddress(registerRequest.getAddress());
+        user.setCity(registerRequest.getCity());
+        user.setDob(registerRequest.getDob());
+        user.setGender(registerRequest.getGender());
+        user.setBlood_group(registerRequest.getBlood_group());
+        user.setJmbg(registerRequest.getJmbg());
+        user.setRole("patient");
+
+        User savedUser = userRepository.save(user);
+
+        String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole());
+
+        return new AuthResponse(savedUser.getUid(), token);
     }
 }

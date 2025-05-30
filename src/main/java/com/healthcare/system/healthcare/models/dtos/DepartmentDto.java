@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AuthResponse {
-    private Integer uid;
-    private String token;
-
+public class DepartmentDto {
+    private int id;
+    private String name;
+    private int floor;
 }
