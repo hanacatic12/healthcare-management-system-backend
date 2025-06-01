@@ -1,6 +1,4 @@
-/*
 package com.healthcare.system.healthcare.config;
-
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,20 +9,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
+    @Value("${frontend.url}")
+    private String[] frontendUrl;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        System.out.println("CORS config loaded");
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowCredentials(true);
+                        .allowedOrigins(frontendUrl);
             }
         };
     }
 }
-
- */
