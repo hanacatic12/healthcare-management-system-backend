@@ -1,14 +1,11 @@
 package com.healthcare.system.healthcare.models.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "documents")
-@Getter
-@Setter
 public class Document {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,4 +26,23 @@ public class Document {
 
     @Column(name = "is_for_patient")
     private Boolean isForPatient;
-} 
+
+    // Getters and setters (if you don't use Lombok)
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public Doctor getSender() { return sender; }
+    public void setSender(Doctor sender) { this.sender = sender; }
+
+    public Patient getReceiver() { return receiver; }
+    public void setReceiver(Patient receiver) { this.receiver = receiver; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+
+    public Boolean getIsForPatient() { return isForPatient; }
+    public void setIsForPatient(Boolean isForPatient) { this.isForPatient = isForPatient; }
+}
