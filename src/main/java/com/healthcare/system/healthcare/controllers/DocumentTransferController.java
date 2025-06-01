@@ -1,8 +1,8 @@
 package com.healthcare.system.healthcare.controllers;
 
-import com.healthcare.system.healthcare.models.dtos.DocumentTransferRequest;
-import com.healthcare.system.healthcare.models.Document;
+import com.healthcare.system.healthcare.models.dtos.DocumentDto;
 import com.healthcare.system.healthcare.services.DocumentTransferService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,35 +11,25 @@ import java.util.List;
 @RequestMapping("/documents")
 public class DocumentTransferController {
 
-    private final DocumentTransferService service;
+    private final DocumentTransferService documentTransferService;
 
-    public DocumentTransferController(DocumentTransferService service) {
-        this.service = service;
+    @Autowired
+    public DocumentTransferController(DocumentTransferService documentTransferService) {
+        this.documentTransferService = documentTransferService;
     }
 
-    @GetMapping
-    public List<Document> getAllDocuments() {
-        return service.getAllDocuments();
-    }
-
-    @GetMapping("/received/{userId}")
-    public List<Document> getReceived(@PathVariable Integer userId) {
-        return service.getReceivedDocuments(userId);
-    }
-
-    @GetMapping("/sent/{userId}")
-    public List<Document> getSent(@PathVariable Integer userId) {
-        return service.getSentDocuments(userId);
+    @GetMapping("/all")
+    public List<DocumentDto> getAllDocuments() {
+        return documentTransferService.getAllDocuments();
     }
 
     @GetMapping("/user/{userId}")
-    public List<Document> getDocumentsForUser(@PathVariable Integer userId) {
-        return service.getDocumentsForUser(userId);
+    public List<DocumentDto> getDocumentsForUser(@PathVariable Integer userId) {
+        return documentTransferService.getDocumentsForUser(userId);
     }
 
     @PostMapping("/send")
-    public Document sendDocument(@RequestBody DocumentTransferRequest request) {
-        return service.sendDocument(request);
+    public DocumentDto sendDocument(@RequestBody DocumentDto documentDto) {
+        return documentTransferService.sendDocument(documentDto);
     }
 }
-
