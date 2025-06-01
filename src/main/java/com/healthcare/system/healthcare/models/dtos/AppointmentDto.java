@@ -1,7 +1,5 @@
 package com.healthcare.system.healthcare.models.dtos;
 
-import com.healthcare.system.healthcare.models.entities.Appointment;
-import io.micrometer.common.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +13,7 @@ import java.time.LocalTime;
 public class  AppointmentDto {
     private Integer aid;
     private Integer patientId;
-    private Integer doctor;
+    private Integer doctorId;
     private Integer room;
     private String note;
     private LocalDate date;
