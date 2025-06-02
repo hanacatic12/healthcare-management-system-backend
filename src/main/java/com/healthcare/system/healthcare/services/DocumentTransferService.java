@@ -39,9 +39,7 @@ public class DocumentTransferService {
     }
 
     public List<DocumentDto> getDocumentsForUser(Integer userId) {
-        // Documents sent by doctor (sender)
         List<Document> sentDocs = documentRepository.findBySender_Did(userId);
-        // Documents received by patient (receiver)
         List<Document> receivedDocs = documentRepository.findByReceiver_Pid(userId);
 
         List<Document> allDocs = new ArrayList<>();
@@ -56,14 +54,12 @@ public class DocumentTransferService {
     public DocumentDto sendDocument(DocumentDto dto) {
         Document document = new Document();
 
-        // Fetch sender (Doctor)
         Optional<Doctor> senderOpt = doctorRepository.findById(dto.getSenderId());
         if (senderOpt.isEmpty()) {
             throw new IllegalArgumentException("Invalid sender doctor ID: " + dto.getSenderId());
         }
         document.setSender(senderOpt.get());
 
-        // Fetch receiver (Patient)
         Optional<Patient> receiverOpt = patientRepository.findById(dto.getReceiverId());
         if (receiverOpt.isEmpty()) {
             throw new IllegalArgumentException("Invalid receiver patient ID: " + dto.getReceiverId());
@@ -77,6 +73,21 @@ public class DocumentTransferService {
         documentRepository.save(document);
 
         return mapToDto(document);
+    }
+
+    public DocumentDto getDocumentById(Integer id){
+        Optional<Document> documentOpt = documentRepository.findById(id);
+        if(documentOpt.isEmpty()) {
+            throw new IllegalArgumentException("Document not found with ID: " + id);
+        }
+        return mapToDto(documentOpt.get());
+    }
+
+    public void deleteDocument(Integer id){
+        if (!documentRepository.existsById(id)) {
+            throw new IllegalArgumentException("Cannot delete. Document not found with ID: " + id);
+        }
+        documentRepository.deleteById(id);
     }
 
     private DocumentDto mapToDto(Document document) {
