@@ -1,4 +1,4 @@
-package com.healthcare.system.healthcare;
+package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.DocumentDto;
 import com.healthcare.system.healthcare.models.entities.Doctor;
