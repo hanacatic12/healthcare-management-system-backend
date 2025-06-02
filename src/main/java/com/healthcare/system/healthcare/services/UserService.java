@@ -1,20 +1,16 @@
 package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.UserDto;
-import com.healthcare.system.healthcare.models.entities.Doctor;
 import com.healthcare.system.healthcare.models.entities.User;
 import com.healthcare.system.healthcare.repositories.DepartmentsRepository;
 import com.healthcare.system.healthcare.repositories.DoctorRepository;
 import com.healthcare.system.healthcare.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserService {
 
-    private List<UserDto> users = new ArrayList<>();
     private UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private final DepartmentsRepository departmentsRepository;
@@ -71,5 +67,3 @@ public class UserService {
 
 
 }
-
-
