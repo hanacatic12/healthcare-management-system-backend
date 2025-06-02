@@ -8,7 +8,6 @@ import com.healthcare.system.healthcare.models.entities.User;
 import com.healthcare.system.healthcare.repositories.PatientRepository;
 import com.healthcare.system.healthcare.repositories.UserRepository;
 import com.healthcare.system.healthcare.util.JwtUtil;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")

@@ -21,8 +21,8 @@ public class HealthcareUserDetailsService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
-                .password(user.getPassword()) // hashirani password
-                .roles(user.getRole()) // npr. "DOCTOR" ili "PATIENT"
+                .password(user.getPassword())
+                .roles(user.getRole())
                 .build();
     }
 }

@@ -50,6 +50,8 @@ public class AppointmentService {
 
         } else if ("reject".equalsIgnoreCase(action)) {
             appointment.setStatus("rejected");
+        } else {
+            throw new IllegalArgumentException("Unknown action: " + action);
         }
 
         Appointment updated = appointmentsRepository.save(appointment);
