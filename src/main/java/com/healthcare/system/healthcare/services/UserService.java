@@ -71,26 +71,5 @@ public class UserService {
 
 
 }
-//
-//    public AuthResponse RegisterUser(RegisterRequest request) {
-//        if(!request.getPassword().equals(request.getConfirmPassword())) {
-//            throw new RuntimeException("Passwords do not match");
-//        } else if (request.getPassword().length() < 8) {
-//            throw new RuntimeException("Password must be at least 8 characters");
-//        }
-//        else {
-//            User user = new User();
-//            user.setName(request.getFirstName() + " " + request.getLastName());
-//            user.setEmail(request.getEmail());
-//            user.setPassword(request.getPassword());
-//            user.setPhone(request.getPhone());
-//            user.setAddress(request.getAddress());
-//            user.setCity(request.getCity());
-//            user.setDob(request.getDob());
-//            user.setGender(request.getGender());
-//            user.setBlood_group(request.getBlood_group());
-//            userRepository.save(user);
-//            return
-//        }
-//    }
+
 
