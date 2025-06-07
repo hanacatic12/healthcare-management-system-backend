@@ -3,6 +3,7 @@ package com.healthcare.system.healthcare.controllers;
 import com.healthcare.system.healthcare.models.dtos.DocumentDto;
 import com.healthcare.system.healthcare.services.DocumentTransferService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +30,8 @@ public class DocumentTransferController {
     }
 
     @PostMapping("/send")
-    public DocumentDto sendDocument(@RequestBody DocumentDto documentDto) {
-        return documentTransferService.sendDocument(documentDto);
+    public ResponseEntity<DocumentDto> sendDocument(@RequestBody DocumentDto request) {
+        DocumentDto savedDoc = documentTransferService.sendDocument(request);
+        return ResponseEntity.ok(savedDoc);
     }
 }

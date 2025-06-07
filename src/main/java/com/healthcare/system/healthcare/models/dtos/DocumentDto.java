@@ -6,8 +6,9 @@ public class DocumentDto {
     private String title;
     private String content;
     private Boolean isForPatient;
-    private Integer senderId;    // Doctor ID
-    private Integer receiverId;  // Patient ID
+    private Integer senderId;
+    private Integer receiverId;
+    private String fileName;
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -26,5 +27,7 @@ public class DocumentDto {
 
     public Integer getReceiverId() { return receiverId; }
     public void setReceiverId(Integer receiverId) { this.receiverId = receiverId; }
-}
 
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+}
