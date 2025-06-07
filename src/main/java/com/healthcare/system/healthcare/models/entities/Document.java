@@ -27,7 +27,11 @@ public class Document {
     @Column(name = "is_for_patient")
     private Boolean isForPatient;
 
-    // Getters and setters (if you don't use Lombok)
+    // Add this field to store the filename of the uploaded file
+    @Column(name = "file_name")
+    private String fileName;
+
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -45,4 +49,7 @@ public class Document {
 
     public Boolean getIsForPatient() { return isForPatient; }
     public void setIsForPatient(Boolean isForPatient) { this.isForPatient = isForPatient; }
+
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
 }

@@ -9,7 +9,10 @@ import com.healthcare.system.healthcare.repositories.DoctorRepository;
 import com.healthcare.system.healthcare.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +24,7 @@ public class DocumentTransferService {
     private final DocumentRepository documentRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+
 
     @Autowired
     public DocumentTransferService(DocumentRepository documentRepository,
@@ -51,30 +55,6 @@ public class DocumentTransferService {
                 .collect(Collectors.toList());
     }
 
-    public DocumentDto sendDocument(DocumentDto dto) {
-        Document document = new Document();
-
-        Optional<Doctor> senderOpt = doctorRepository.findById(dto.getSenderId());
-        if (senderOpt.isEmpty()) {
-            throw new IllegalArgumentException("Invalid sender doctor ID: " + dto.getSenderId());
-        }
-        document.setSender(senderOpt.get());
-
-        Optional<Patient> receiverOpt = patientRepository.findById(dto.getReceiverId());
-        if (receiverOpt.isEmpty()) {
-            throw new IllegalArgumentException("Invalid receiver patient ID: " + dto.getReceiverId());
-        }
-        document.setReceiver(receiverOpt.get());
-
-        document.setTitle(dto.getTitle());
-        document.setContent(dto.getContent());
-        document.setIsForPatient(dto.getIsForPatient());
-
-        documentRepository.save(document);
-
-        return mapToDto(document);
-    }
-
     public DocumentDto getDocumentById(Integer id){
         Optional<Document> documentOpt = documentRepository.findById(id);
         if(documentOpt.isEmpty()) {
@@ -98,6 +78,35 @@ public class DocumentTransferService {
         dto.setIsForPatient(document.getIsForPatient());
         dto.setSenderId(document.getSender() != null ? document.getSender().getDid() : null);
         dto.setReceiverId(document.getReceiver() != null ? document.getReceiver().getPid() : null);
+        dto.setFileName(document.getFileName());
         return dto;
     }
+
+    public DocumentDto sendDocument(DocumentDto request) {
+        Document document = new Document();
+
+        document.setTitle(request.getTitle());
+        document.setContent(request.getContent());
+        document.setFileName(request.getFileName());
+
+        if (request.getSenderId() != null) {
+            Doctor sender = doctorRepository.findById(request.getSenderId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid senderId"));
+            document.setSender(sender);
+        }
+
+        if (request.getReceiverId() != null) {
+            Patient receiver = patientRepository.findById(request.getReceiverId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid receiverId"));
+            document.setReceiver(receiver);
+        }
+
+        document.setIsForPatient(true);
+
+        Document saved = documentRepository.save(document);
+
+        return mapToDto(saved);
+    }
+
+
 }
