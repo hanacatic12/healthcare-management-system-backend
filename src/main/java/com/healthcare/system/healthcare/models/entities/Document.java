@@ -27,7 +27,6 @@ public class Document {
     @Column(name = "is_for_patient")
     private Boolean isForPatient;
 
-    // Add this field to store the filename of the uploaded file
     @Column(name = "file_name")
     private String fileName;
 

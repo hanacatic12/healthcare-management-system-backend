@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PatientAppointmentService {
-//    private List<AppointmentDto> appointments = new ArrayList<>();
-//    private Integer counter = 4;
+
 
     private AppointmentsRepository appointmentsRepository;
     private DepartmentsRepository departmentsRepository;

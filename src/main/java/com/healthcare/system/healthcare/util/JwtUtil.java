@@ -31,7 +31,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(secretKey)
-                .parseClaimsJws(token) // throws: ExpiredJwtException among else
+                .parseClaimsJws(token)
                 .getBody();
     }
 
