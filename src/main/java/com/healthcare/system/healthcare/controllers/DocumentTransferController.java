@@ -25,9 +25,13 @@ public class DocumentTransferController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<DocumentDto> getDocumentsForUser(@PathVariable Integer userId) {
-        return documentTransferService.getDocumentsForUser(userId);
+    public List<DocumentDto> getDocumentsForUser(
+            @PathVariable Integer userId,
+            @RequestParam("role") String role) {
+        return documentTransferService.getDocumentsForUser(userId, role);
     }
+
+
 
     @PostMapping("/send")
     public ResponseEntity<DocumentDto> sendDocument(@RequestBody DocumentDto request) {
