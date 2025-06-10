@@ -29,3 +29,4 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+src/main/java/com/healthcare/system/healthcare/config/StartupSeeder.java
