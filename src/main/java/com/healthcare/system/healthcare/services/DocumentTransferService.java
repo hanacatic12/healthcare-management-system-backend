@@ -42,18 +42,21 @@ public class DocumentTransferService {
                 .collect(Collectors.toList());
     }
 
-    public List<DocumentDto> getDocumentsForUser(Integer userId) {
-        List<Document> sentDocs = documentRepository.findBySender_Did(userId);
-        List<Document> receivedDocs = documentRepository.findByReceiver_Pid(userId);
+    public List<DocumentDto> getDocumentsForUser(Integer userId, String role) {
+        List<Document> documents;
+        if ("DOCTOR".equalsIgnoreCase(role)) {
+            documents = documentRepository.findBySender_Did(userId);
+        } else if ("PATIENT".equalsIgnoreCase(role)) {
+            documents = documentRepository.findByReceiver_Pid(userId);
+        } else {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
 
-        List<Document> allDocs = new ArrayList<>();
-        allDocs.addAll(sentDocs);
-        allDocs.addAll(receivedDocs);
-
-        return allDocs.stream()
+        return documents.stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
+
 
     public DocumentDto getDocumentById(Integer id){
         Optional<Document> documentOpt = documentRepository.findById(id);
