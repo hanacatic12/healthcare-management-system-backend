@@ -1,63 +1,79 @@
 package com.healthcare.system.healthcare.services;
 
 import com.healthcare.system.healthcare.models.dtos.PatientResponse;
-import com.healthcare.system.healthcare.models.Patient;
+import com.healthcare.system.healthcare.models.entities.Diagnosis;
+import com.healthcare.system.healthcare.models.entities.Patient;
+import com.healthcare.system.healthcare.repositories.DiagnosisRepository;
+import com.healthcare.system.healthcare.repositories.PatientRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public interface PatientListService {
-    List<Patient> getAllPatients();
-    List<Patient> getPatientsForDoctor(Integer doctorId);
-    PatientResponse getPatientDetails(Integer patientId);
-}
-
 @Service
-class PatientListServiceImpl implements PatientListService {
+public class PatientListService {
 
-    private final List<Patient> dummyPatients = new ArrayList<>();
+    private final PatientRepository patientRepository;
+    private final DiagnosisRepository diagnosisRepository;
 
-    public PatientListServiceImpl() {
-        dummyPatients.add(new Patient(1, "John Doe", 10, "john@example.com", "+387 33 975 002", "Hrasnička cesta 3a", "Sarajevo", "01.01.1985", "Male", "A+", List.of("Diabetes")));
-        dummyPatients.add(new Patient(2, "Jane Smith", 11, "jane@example.com", "+387 33 975 003", "Obala 3", "Zenica", "15.03.1990", "Female", "B-", List.of("Hypertension")));
-        dummyPatients.add(new Patient(3, "Alice Johnson", 10, "alice@example.com", "+387 33 975 004", "Mostar 2", "Mostar", "21.07.1982", "Female", "O+", List.of("Asthma")));
+    public PatientListService(PatientRepository patientRepository,
+                              DiagnosisRepository diagnosisRepository) {
+        this.patientRepository = patientRepository;
+        this.diagnosisRepository = diagnosisRepository;
     }
 
-    @Override
     public List<Patient> getAllPatients() {
-        return dummyPatients;
+        return patientRepository.findAll();
     }
 
-    @Override
     public List<Patient> getPatientsForDoctor(Integer doctorId) {
-        if (doctorId == null) return Collections.emptyList();
-        return dummyPatients.stream()
-                .filter(patient -> Objects.equals(patient.getDoctorId(), doctorId))
+        return patientRepository.findAll().stream()
+                .filter(patient -> Objects.equals(patient.getUser().getUid(), doctorId))
                 .collect(Collectors.toList());
     }
 
-    @Override
     public PatientResponse getPatientDetails(Integer patientId) {
-        Patient patient = dummyPatients.stream()
-                .filter(p -> p.getId().equals(patientId))
-                .findFirst()
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
+        var user = patient.getUser();
+
         return new PatientResponse(
-                patient.getId(),
-                patient.getName(),
-                patient.getEmail(),
-                patient.getPhone(),
-                patient.getAddress(),
-                patient.getCity(),
-                patient.getDateOfBirth(),
-                patient.getGender(),
-                patient.getBloodGroup(),
+                patient.getPid(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getCity(),
+                user.getDob().toString(),
+                user.getGender(),
+                user.getBlood_group(),
                 patient.getDiagnoses()
+                        .stream()
+                        .map(Diagnosis::getName)
+                        .collect(Collectors.toList())
         );
     }
+
+    public void addDiagnosisToPatient(Integer patientId, Integer diagnosisId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Diagnosis diagnosis = diagnosisRepository.findById(diagnosisId)
+                .orElseThrow(() -> new RuntimeException("Diagnosis not found"));
+
+        patient.getDiagnoses().add(diagnosis);
+        patientRepository.save(patient);
+    }
+
+    public void removeDiagnosisFromPatient(Integer patientId, Integer diagnosisId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Diagnosis diagnosis = diagnosisRepository.findById(diagnosisId)
+                .orElseThrow(() -> new RuntimeException("Diagnosis not found"));
+
+        patient.getDiagnoses().remove(diagnosis);
+        patientRepository.save(patient);
+    }
 }
+

@@ -49,21 +49,31 @@ public class DocumentTransferServiceTest {
     }
 
     @Test
-    void testGetDocumentsForUser() {
+    void testGetDocumentsForDoctor() {
         Document sentDoc = new Document();
         sentDoc.setId(1);
         sentDoc.setTitle("Report");
 
+        when(documentRepository.findBySender_Did(1)).thenReturn(List.of(sentDoc));
+
+        List<DocumentDto> result = service.getDocumentsForUser(1, "DOCTOR");
+        assertEquals(1, result.size());
+        assertEquals("Report", result.get(0).getTitle());
+    }
+
+    @Test
+    void testGetDocumentsForPatient() {
         Document receivedDoc = new Document();
         receivedDoc.setId(2);
         receivedDoc.setTitle("Prescription");
 
-        when(documentRepository.findBySender_Did(1)).thenReturn(List.of(sentDoc));
         when(documentRepository.findByReceiver_Pid(1)).thenReturn(List.of(receivedDoc));
 
-        List<DocumentDto> result = service.getDocumentsForUser(1);
-        assertEquals(2, result.size());
+        List<DocumentDto> result = service.getDocumentsForUser(1, "PATIENT");
+        assertEquals(1, result.size());
+        assertEquals("Prescription", result.get(0).getTitle());
     }
+
 
     @Test
     void testSendDocumentSuccess() {
