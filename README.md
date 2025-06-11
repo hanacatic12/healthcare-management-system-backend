@@ -241,15 +241,15 @@ Please note that this project is released with a Contributor Code of Conduct. By
 ## 🛠️ Technical Architecture
 
 ### Backend Architecture
-- 🏗️ Spring Boot 3.4.5
-- 📱 RESTful API design
-- 🔐 Spring Security with JWT
-- 📊 Spring Data JPA
-- 📄 Lombok for reduced boilerplate
+-  Spring Boot 3.4.5
+-  RESTful API design
+-  Spring Security with JWT
+-  Spring Data JPA
+-  Lombok for reduced boilerplate
 
 ### Database Structure
-- 📊 PostgreSQL database
-- 📝 Entity-Relationship Model:
+-  PostgreSQL database
+-  Entity-Relationship Model:
   - Patient (One-to-Many with Appointments, Diagnoses)
   - Doctor (One-to-Many with Appointments)
   - Appointment (Many-to-One with Patient, Doctor)
